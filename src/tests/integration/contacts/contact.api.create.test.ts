@@ -10,12 +10,13 @@ test('createContact creates a new contact successfully', async () => {
   // Define the contact data
   const contact: ContactData = {
     fullname: 'Hello World',
+    company: 'Microsoft'
   };
 
   // Define any instructions (optional)
   const instructions: ContactInstructions = {
-    createCompanyIfNotExists: true,
-    overwriteContact: false
+    createcompanyifnotexists: true,
+    overwritecontact: true
   };
 
   // Call the createContact method

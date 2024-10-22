@@ -3,8 +3,8 @@ import type { Credentials } from '../auth/credentials';
 import type { ContactData } from './contactData';
 
 export interface ContactInstructions {
-    createCompanyIfNotExists?: boolean;
-    overwriteContact?: boolean;
+    createcompanyifnotexists?: boolean;
+    overwritecontact?: boolean;
 }
 
 export type CreateContactPayload = {
