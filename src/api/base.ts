@@ -35,10 +35,6 @@ export abstract class BaseApi {
 
             const response = await this.client.post<TResponse>(url, payload);
 
-            if ((response.data as any).status !== ResponseStatus.Success) {
-                throw new ApiError(`API returned error status: ${(response.data as any).status}`, response.data);
-            }
-
             return response.data;
         } catch (error) {
             throw handleError(error, operation);
