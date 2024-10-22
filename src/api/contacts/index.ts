@@ -29,8 +29,8 @@ export class Contacts extends BaseApi {
                 createContact: {
                     credentials: this.credentials,
                     instructions: {
-                        createCompanyIfNotExists: instructions.createCompanyIfNotExists ?? false,
-                        overwriteContact: instructions.overwriteContact ?? false,
+                        createcompanyifnotexists: instructions.createcompanyifnotexists ?? false,
+                        overwritecontact: instructions.overwritecontact ?? false,
                     },
                     contact: contactData,
                 },
