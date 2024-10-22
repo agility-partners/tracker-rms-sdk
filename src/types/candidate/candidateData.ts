@@ -2,11 +2,11 @@ import { z } from 'zod';
 import { generateDefaultsFromSchema } from '../../utils/generateDefaults';
 
 const JobHistorySchema = z.object({
-  company: z.string(),
-  jobtitle: z.string(),
-  startdate: z.string(),
+  company: z.string().optional(),
+  jobtitle: z.string().optional(),
+  startdate: z.string().optional(),
   enddate: z.string().optional(),
-  description: z.string(),
+  description: z.string().optional(),
 });
 
 const CustomFieldSchema = z.object({
