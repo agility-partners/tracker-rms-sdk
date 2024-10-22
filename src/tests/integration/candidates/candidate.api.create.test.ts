@@ -50,7 +50,7 @@ test('createCandidate creates a new candidate successfully', async () => {
     ],
     salary: 33000,
     note: "Lorem ipsum dolor sit amet.",
-    image: "http://url.to.image",
+    image: "",
     skills: "123,456,789,654",
     status: "Active",
   };
