@@ -6,9 +6,14 @@ import {
     type CreateContactResponse,
     type SearchContactPayload,
     type SearchContactResponse,
+    type UpdateContactPayload,
+    type UpdateContactResponse,
     type ContactData,
+    type ContactUpdateData,
     contactDataSchema,
+    contactUpdateSchema,
 } from '../../types/contact';
+import { formatValidationError } from '../../utils/errors';
 
 export class Contacts extends BaseApi {
     protected get entityType(): string {
@@ -35,6 +40,20 @@ export class Contacts extends BaseApi {
             '/api/widget/getRecords',
             instructions,
         );
+    }
+
+    async updateContact(
+        id: number,
+        updates: Partial<ContactUpdateData>
+    ): Promise<UpdateContactResponse> {
+        const parsedData = contactUpdateSchema.partial().safeParse(updates);
+        if (!parsedData.success) {
+            const formattedError = formatValidationError(parsedData.error);
+            throw new Error(`Validation failed: ${formattedError}`);
+        }
+
+        const payload = this.buildUpdatePayload(id, parsedData.data);
+        return this.update<UpdateContactResponse>('/api/widget/updateRecord', payload);
     }
 
     protected buildCreatePayload(data: ContactData, instructions: CreateContactOptions): CreateContactPayload {
@@ -67,7 +86,23 @@ export class Contacts extends BaseApi {
         throw new Error("Find operation not implemented for Contacts");
     }
 
-    protected buildUpdatePayload(id: number): never {
-        throw new Error("Update operation not implemented for Contacts");
+    protected buildUpdatePayload(id: number, updates: Partial<ContactUpdateData>): UpdateContactPayload {
+        const updateFields = Object.entries(updates).map(([column, value]) => ({
+            column,
+            value: value?.toString() ?? ''
+        }));
+
+        return {
+            trackerrms: {
+                updateRecord: {
+                    credentials: this.credentials,
+                    instructions: {
+                        recordtype: this.entityType,
+                        recordid: id
+                    },
+                    updates: updateFields
+                }
+            }
+        };
     }
 }

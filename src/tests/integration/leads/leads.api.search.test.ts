@@ -2,29 +2,26 @@ import { test, expect } from "bun:test";
 import Tracker from "../../../tracker";
 import type { SearchInstructions } from "../../../types/search/searchData";
 
-test('searchContacts returns contacts matching search criteria', async () => {
+test('searchLeads returns leads matching search criteria', async () => {
   const tracker = new Tracker();
 
   const searchInstructions: SearchInstructions = {
-    searchtext: 'Adam Smith',
+    searchtext: 'Java Project Manager',
     onlymyrecords: false,
   };
 
-  const response = await tracker.contacts.searchContacts(searchInstructions);
-
-  console.log(response)
+  const response = await tracker.leads.searchLeads(searchInstructions);
 
   // Test structure of results if there are any
   if (response.results.length > 0) {
-    const firstContact = response.results[0];
-    expect(firstContact).toHaveProperty('firstname');
-    expect(firstContact).toHaveProperty('lastname');
-    expect(firstContact).toHaveProperty('email');
-    expect(firstContact).toHaveProperty('phone');
-    expect(firstContact).toHaveProperty('status');
-    expect(firstContact).toHaveProperty('datecreated');
-    expect(firstContact.details).toHaveProperty('address');
-    expect(firstContact.details).toHaveProperty('title');
+    const firstLead = response.results[0];
+    expect(firstLead).toHaveProperty('name');
+    expect(firstLead).toHaveProperty('company');
+    expect(firstLead).toHaveProperty('status');
+    expect(firstLead).toHaveProperty('dateopened');
+    expect(firstLead).toHaveProperty('details');
+    expect(firstLead.details).toHaveProperty('source');
+    expect(firstLead.details).toHaveProperty('clientname');
   }
 
   // Verify response structure

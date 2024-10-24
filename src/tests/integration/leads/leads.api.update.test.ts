@@ -22,4 +22,4 @@ test('updateLead updates a lead successfully', async () => {
     expect(response.status).toBe(0); // Success status
     expect(response.message).toBe('success');
     expect(response.count).toBeDefined();
-});
+}); 

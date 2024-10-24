@@ -1,10 +1,9 @@
-// src/types/lead/api.ts
 import { 
     type BaseEntityConfig, 
     type BuildEntityTypes 
 } from "../common/entityTypes";
-import type { ContactSearchResult } from "./models";
 import type { ContactData } from "./schema";
+import type { ContactSearchResult } from "./models";
 
 export const CONTACT_OPERATION = 'createContact' as const;
 export const CONTACT_FIELD = 'contact' as const;
@@ -30,3 +29,5 @@ export type SearchContactPayload = ContactTypeBundle['Payloads']['Search'];
 export type CreateContactResponse = ContactTypeBundle['Responses']['Create'];
 export type SearchContactResponse = ContactTypeBundle['Responses']['Search'];
 export type GetContactResponse = ContactTypeBundle['Responses']['Get'];
+export type UpdateContactPayload = ContactTypeBundle['Payloads']['Update'];
+export type UpdateContactResponse = ContactTypeBundle['Responses']['Update'];

@@ -12,8 +12,6 @@ test('searchContacts returns contacts matching search criteria', async () => {
 
   const response = await tracker.contacts.searchContacts(searchInstructions);
 
-  console.log(response)
-
   // Test structure of results if there are any
   if (response.results.length > 0) {
     const firstContact = response.results[0];
