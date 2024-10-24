@@ -1,8 +1,9 @@
-export interface ApiResponse<T = undefined> {
+// Base API response type with proper generic handling
+export interface ApiResponse<TData> {
   status: number;
   message: string;
   count: number;
-  results?: T[];
+  results: TData | TData[]; 
 }
 
 export enum ResponseStatus {
@@ -12,3 +13,4 @@ export enum ResponseStatus {
   RecordFoundCannotOverwrite = 3,
   InvalidRequest = 99,
 }
+

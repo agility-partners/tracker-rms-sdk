@@ -12,30 +12,21 @@ test('createJob creates a new job opportunity successfully', async () => {
 
   // Define the job data
   const jobData: JobData = {
-    opportunityname: "New Contact Us Submission",
+    opportunityname: "Data Center Operations Specialist",
     department: "Sales",
-    worktype: "Permanent",
-    source: "Client Request",
-    description: "Lorem ipsum dolor sit amet.",
-    firstname: "John",
-    lastname: "Brown",
+    worktype: "Contract To Hire",
     fullname: "John Brown",
-    jobtitle: "Managing Director",
-    company: "ABC Incorporated",
-    address1: "2567 Lexington Avenue",
+    source: "",
+    description: "1 role is day shift and 1 is night shift. This team works twelve hour shifts. 7a-7p and 7p-7a. They alternate 3 days and 4 days a week. So one week is Sun-Tues then Sun-WedÂ \nÂ ",
+    company: "Compass Group",
+    address1: "",
     address2: "",
-    city: "New York",
-    state: "NY",
-    zipcode: "10263",
-    country: "United States",
-    businessphone: "555-2387",
-    homephone: "555-6890",
-    cellphone: "888-3465",
-    email: "john.brown@abcincorp.com",
-    linkedin: "https://linkedin.com/jbabc/",
-    website: ""
+    city: "",
+    state: "",
+    zipcode: "",
+    country: "",
   };
-
+  
   // Define instructions
   const instructions: JobInstructions = {
     createpersonifnotexists: true

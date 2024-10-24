@@ -1,7 +1,6 @@
 import { test, expect } from "bun:test";
-import type { ContactData } from "../../../types/contact/contactData";
-import type { ContactInstructions } from "../../../types/contact/contactTypes";
 import Tracker from "../../../tracker";
+import type { ContactData, CreateContactOptions } from "../../../types";
 
 test('createContact creates a new contact successfully', async () => {
   // Initialize the Tracker
@@ -14,9 +13,9 @@ test('createContact creates a new contact successfully', async () => {
   };
 
   // Define any instructions (optional)
-  const instructions: ContactInstructions = {
+  const instructions: CreateContactOptions = {
     createcompanyifnotexists: true,
-    overwritecontact: true
+    overwritecontact: false
   };
 
   // Call the createContact method

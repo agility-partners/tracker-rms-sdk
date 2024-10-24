@@ -1,58 +1,73 @@
 import { BaseApi } from '../base';
+import type { SearchInstructions } from '../../types/search/searchData';
 import { 
-    type CreateContactResponse, 
-    type CreateContactPayload, 
-    type ContactInstructions,
-    type GetContactPayload,
-} from '../../types/contact/contactTypes';
-import {
-    contactCreateDataSchema,
-    type ContactCreateData,
-} from '../../types/contact/contactData';
+    type CreateContactOptions,
+    type CreateContactPayload,
+    type CreateContactResponse,
+    type SearchContactPayload,
+    type SearchContactResponse,
+    type ContactData,
+    contactDataSchema,
+} from '../../types/contact';
 
 export class Contacts extends BaseApi {
+    protected get entityType(): string {
+        return 'N';
+    }
 
-    async createContact(contactData: ContactCreateData,instructions: ContactInstructions = {}): Promise<CreateContactResponse> {
-        return this.create<CreateContactResponse, ContactCreateData, ContactInstructions>(
+    async createContact(
+        contactData: Partial<ContactData> = {},
+        instructions: CreateContactOptions = {
+            createcompanyifnotexists: true,
+            overwritecontact: false
+        }
+    ): Promise<CreateContactResponse> {
+        return this.create<CreateContactResponse, ContactData, CreateContactOptions>(
             '/api/widget/createContact',
             contactData,
-            contactCreateDataSchema,
-            'creating contact',
+            contactDataSchema,
             instructions
         );
     }
 
+    async searchContacts(instructions: SearchInstructions): Promise<SearchContactResponse> {
+        return this.search<SearchContactResponse>(
+            '/api/widget/getRecords',
+            instructions,
+        );
+    }
 
-    protected buildCreatePayload(contactData: ContactCreateData, instructions: ContactInstructions = {}): CreateContactPayload {
+    protected buildCreatePayload(data: ContactData, instructions: CreateContactOptions): CreateContactPayload {
         return {
             trackerrms: {
-                createContact: {
+                createContact: { 
                     credentials: this.credentials,
                     instructions: {
-                        createcompanyifnotexists: instructions.createcompanyifnotexists ?? false,
-                        overwritecontact: instructions.overwritecontact ?? false,
+                        createcompanyifnotexists: instructions.createcompanyifnotexists,
+                        overwritecontact: instructions.overwritecontact,
                     },
-                    contact: contactData,
+                    contact: data, 
                 },
             },
         };
     }
 
-    protected buildFindPayload(id: number): GetContactPayload {
+    protected buildSearchPayload(instructions: SearchInstructions): SearchContactPayload {
         return {
             trackerrms: {
-                getIndividualRecord: {
+                getRecords: {
                     credentials: this.credentials,
-                    instructions: {
-                        recordtype: 'N',
-                        recordid: id
-                    }
+                    instructions
                 }
             }
         };
     }
 
-    protected buildUpdatePayload(id: number, updates: any) {
-        throw new Error('Method not implemented.');
+    protected buildFindPayload(id: number): never {
+        throw new Error("Find operation not implemented for Contacts");
+    }
+
+    protected buildUpdatePayload(id: number): never {
+        throw new Error("Update operation not implemented for Contacts");
     }
 }

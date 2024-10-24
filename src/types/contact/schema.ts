@@ -1,16 +1,11 @@
 import { z } from 'zod';
 import { generateDefaultsFromSchema } from '../../utils/generateDefaults';
 
-// Define Zod schema for LeadData
-export const leadDataSchema = z.object({
-    leadname: z.string(), // Required field
-    department: z.string().optional(),
-    source: z.string().optional(),
-    description: z.string().optional(),
-    leadpersontype: z.string(), // Required field
+// Define Zod schema for all possible contact fields
+export const contactDataSchema = z.object({
     firstname: z.string().optional(),
     lastname: z.string().optional(),
-    fullname: z.string(), // Required field
+    fullname: z.string(),
     jobtitle: z.string().optional(),
     company: z.string().optional(),
     address1: z.string().optional(),
@@ -25,12 +20,11 @@ export const leadDataSchema = z.object({
     email: z.string().optional(),
     linkedin: z.string().optional(),
     website: z.string().optional(),
+    note: z.string().optional(),
     image: z.string().optional(),
     customfields: z.record(z.string()).optional(),
+    // Add any other fields that are part of the contact data
 });
 
-// Infer TypeScript type from the Zod schema
-export type LeadData = z.infer<typeof leadDataSchema>;
-
-// Automatically generate defaults for LeadData
-export const leadDataDefaults = generateDefaultsFromSchema<LeadData>(leadDataSchema);
+export type ContactData = z.infer<typeof contactDataSchema>;
+export const contactDataDefaults = generateDefaultsFromSchema<ContactData>(contactDataSchema);

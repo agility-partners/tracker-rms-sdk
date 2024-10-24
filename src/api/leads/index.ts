@@ -1,55 +1,73 @@
 import { BaseApi } from '../base';
+import type { SearchInstructions } from '../../types/search/searchData';
 import { 
-    type CreateLeadResponse, 
-    type CreateLeadPayload, 
-    type LeadInstructions,
-} from '../../types/lead/leadTypes';
-import {
-    leadDataSchema,
+    type CreateLeadOptions,
+    type CreateLeadPayload,
+    type CreateLeadResponse,
+    type SearchLeadPayload,
+    type SearchLeadResponse,
     type LeadData,
-} from '../../types/lead/leadData';
+    leadDataSchema,
+} from '../../types/lead';
 
 export class Leads extends BaseApi {
+    protected get entityType(): string {
+        return 'L';
+    }
+
     async createLead(
         leadData: Partial<LeadData> = {},
-        instructions: LeadInstructions = {}
+        instructions: CreateLeadOptions = {
+            createpersonifnotexists: false,
+            notifydepartment: false
+        }
     ): Promise<CreateLeadResponse> {
-        return this.create<CreateLeadResponse, LeadData, LeadInstructions>(
+        return this.create<CreateLeadResponse, LeadData, CreateLeadOptions>(
             '/api/widget/createLead',
             leadData,
             leadDataSchema,
-            'creating lead',
             instructions
         );
     }
 
-    protected buildCreatePayload(data: any, instructions?: any): CreateLeadPayload {
-        const leadData = data as LeadData;
-        const leadInstructions = instructions as LeadInstructions;
+    async searchLeads(instructions: SearchInstructions): Promise<SearchLeadResponse> {
+        return this.search<SearchLeadResponse>(
+            '/api/widget/getRecords',
+            instructions,
+        );
+    }
 
+    protected buildCreatePayload(data: LeadData, instructions: CreateLeadOptions): CreateLeadPayload {
         return {
             trackerrms: {
-                createLead: {
+                createLead: { 
                     credentials: this.credentials,
                     instructions: {
-                        createpersonifnotexists: leadInstructions?.createpersonifnotexists ?? false,
-                        notifydepartment: leadInstructions?.notifydepartment ?? false,
+                        createpersonifnotexists: instructions.createpersonifnotexists,
+                        notifydepartment: instructions.notifydepartment,
                     },
-                    lead: leadData,
+                    lead: data, 
                 },
             },
         };
     }
 
-    protected buildFindPayload(id: number): any {
-        // Implement this if you need to find leads by ID
-        // If not needed, you can throw an error or leave it as a stub
+    protected buildSearchPayload(instructions: SearchInstructions): SearchLeadPayload {
+        return {
+            trackerrms: {
+                getRecords: {
+                    credentials: this.credentials,
+                    instructions
+                }
+            }
+        };
+    }
+
+    protected buildFindPayload(id: number): never {
         throw new Error("Find operation not implemented for Leads");
     }
 
-    protected buildUpdatePayload(id: number): any {
-        // Implement this if you need to find leads by ID
-        // If not needed, you can throw an error or leave it as a stub
-        throw new Error("Find operation not implemented for Leads");
+    protected buildUpdatePayload(id: number): never {
+        throw new Error("Update operation not implemented for Leads");
     }
 }
