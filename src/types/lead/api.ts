@@ -30,3 +30,5 @@ export type SearchLeadPayload = LeadTypeBundle['Payloads']['Search'];
 export type CreateLeadResponse = LeadTypeBundle['Responses']['Create'];
 export type SearchLeadResponse = LeadTypeBundle['Responses']['Search'];
 export type GetLeadResponse = LeadTypeBundle['Responses']['Get'];
+export type UpdateLeadPayload = LeadTypeBundle['Payloads']['Update'];
+export type UpdateLeadResponse = LeadTypeBundle['Responses']['Update'];

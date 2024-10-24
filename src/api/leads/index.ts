@@ -6,9 +6,14 @@ import {
     type CreateLeadResponse,
     type SearchLeadPayload,
     type SearchLeadResponse,
+    type UpdateLeadPayload,
+    type UpdateLeadResponse,
     type LeadData,
+    type LeadUpdateData,
     leadDataSchema,
+    leadUpdateSchema,
 } from '../../types/lead';
+import { formatValidationError } from '../../utils/errors';
 
 export class Leads extends BaseApi {
     protected get entityType(): string {
@@ -35,6 +40,20 @@ export class Leads extends BaseApi {
             '/api/widget/getRecords',
             instructions,
         );
+    }
+
+    async updateLead(
+        id: number,
+        updates: Partial<LeadUpdateData>
+    ): Promise<UpdateLeadResponse> {
+        const parsedData = leadUpdateSchema.partial().safeParse(updates);
+        if (!parsedData.success) {
+            const formattedError = formatValidationError(parsedData.error);
+            throw new Error(`Validation failed: ${formattedError}`);
+        }
+
+        const payload = this.buildUpdatePayload(id, parsedData.data);
+        return this.update<UpdateLeadResponse>('/api/widget/updateRecord', payload);
     }
 
     protected buildCreatePayload(data: LeadData, instructions: CreateLeadOptions): CreateLeadPayload {
@@ -67,7 +86,23 @@ export class Leads extends BaseApi {
         throw new Error("Find operation not implemented for Leads");
     }
 
-    protected buildUpdatePayload(id: number): never {
-        throw new Error("Update operation not implemented for Leads");
+    protected buildUpdatePayload(id: number, updates: Partial<LeadUpdateData>): UpdateLeadPayload {
+        const updateFields = Object.entries(updates).map(([column, value]) => ({
+            column,
+            value: value?.toString() ?? ''
+        }));
+
+        return {
+            trackerrms: {
+                updateRecord: {
+                    credentials: this.credentials,
+                    instructions: {
+                        recordtype: this.entityType,
+                        recordid: id
+                    },
+                    updates: updateFields
+                }
+            }
+        };
     }
 }

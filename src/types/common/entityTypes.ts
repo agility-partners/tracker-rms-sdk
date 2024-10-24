@@ -1,4 +1,11 @@
-import type { CreatePayload, CreateRecordResponse, SearchPayload, SearchResponse } from "./api";
+import type { 
+    CreatePayload, 
+    CreateRecordResponse,
+    SearchPayload, 
+    SearchResponse, 
+    UpdatePayload, 
+    UpdateRecordResponse 
+} from "./api";
 
 // Generic config interface that all entities will implement
 export interface BaseEntityConfig<
@@ -24,6 +31,7 @@ export type EntityPayloads<T extends BaseEntityConfig<any, any, any, string, str
         T['DataField']
     >;
     Search: SearchPayload;
+    Update: UpdatePayload;
 };
 
 // Generic response types
@@ -31,6 +39,7 @@ export type EntityResponses<T extends BaseEntityConfig<any, any, any, string, st
     Create: CreateRecordResponse;
     Search: SearchResponse<T['SearchResult']>;
     Get: SearchResponse<T['EntityData']>;
+    Update: UpdateRecordResponse;
 };
 
 // Main type builder

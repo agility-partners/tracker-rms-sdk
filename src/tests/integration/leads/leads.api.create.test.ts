@@ -12,7 +12,7 @@ test('createLead creates a new lead successfully', async () => {
     const lead: LeadData = {
         leadname: 'New Lead',
         fullname: 'John Doe',
-        department: 'Sales',
+        department: 'Columbus',
         source: 'Website',
         description: 'Lead description',
         leadpersontype: 'N',

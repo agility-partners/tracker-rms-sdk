@@ -24,6 +24,13 @@ export interface ListResponse<T> extends ApiResponse<T> {
     pageSize: number;
 }
 
+// Generic Update Response
+export interface UpdateRecordResponse {
+    status: number;
+    message: string;
+    count: number;
+}
+
 // Generic Search Payload
 export interface SearchPayload {
     trackerrms: {
@@ -47,4 +54,21 @@ export type CreatePayload<
             instructions: TInstructions;
         } & Record<TDataField, TData>
     }
+}
+
+// Generic Update Payload
+export interface UpdatePayload {
+    trackerrms: {
+        updateRecord: {
+            credentials: Credentials;
+            instructions: {
+                recordtype: string;
+                recordid: number;
+            };
+            updates: {
+                column: string;
+                value: string;
+            }[];
+        };
+    };
 }

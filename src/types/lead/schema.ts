@@ -30,3 +30,32 @@ export const leadDataSchema = z.object({
 
 export type LeadData = z.infer<typeof leadDataSchema>;
 export const leadDataDefaults = generateDefaultsFromSchema<LeadData>(leadDataSchema);
+
+export const leadUpdateSchema = z.object({
+    abilityscore: z.string().optional(),
+    authorityscore: z.string().optional(),
+    awarddate: z.string().optional(),
+    competitionscore: z.string().optional(),
+    contacttype: z.string().optional(),
+    currencycode: z.string().optional(),
+    decisionscore: z.string().optional(),
+    department: z.string().optional(),
+    email: z.string().optional(),
+    internalref: z.string().optional(),
+    leaddate: z.string().optional(),
+    leaddescription: z.string().optional(),
+    leadfrom: z.string().optional(),
+    leadname: z.string().optional(),
+    leadsource: z.string().optional(),
+    leadstrategy: z.string().optional(),
+    moneyscore: z.string().optional(),
+    needscore: z.string().optional(),
+    potentialvalue: z.string().optional(),
+    responsecode: z.string().optional(),
+    tag: z.string().optional(),
+    text: z.string().optional(),
+    telephone: z.string().optional(),
+    timingscore: z.string().optional()
+});
+
+export type LeadUpdateData = z.infer<typeof leadUpdateSchema>;
