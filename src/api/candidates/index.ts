@@ -1,52 +1,105 @@
 import { BaseApi } from '../base';
+import type { SearchInstructions } from '../../types/search/searchData';
 import {
-    candidateDataSchema,
-    type CandidateData,
-    type CandidateInstructions,
+    type CreateCandidateOptions,
     type CreateCandidatePayload,
-    type CreateCandidateResponse
+    type CreateCandidateResponse,
+    type SearchCandidatePayload,
+    type SearchCandidateResponse,
+    type UpdateCandidatePayload,
+    type UpdateCandidateResponse,
+    type CandidateData,
+    type CandidateUpdateData,
+    candidateDataSchema,
+    candidateUpdateSchema,
 } from '../../types/candidate';
+import { formatValidationError } from '../../utils/errors';
 
 export class Candidates extends BaseApi {
+    protected get entityType(): string {
+        return 'R';
+    }
+
     async createCandidate(
         candidateData: Partial<CandidateData> = {},
-        instructions: Partial<CandidateInstructions> = {}
+        instructions: CreateCandidateOptions = {
+
+        }
     ): Promise<CreateCandidateResponse> {
-        return this.create<CreateCandidateResponse, CandidateData, Partial<CandidateInstructions>>(
+        return this.create<CreateCandidateResponse, CandidateData, CreateCandidateOptions>(
             '/api/widget/createResource',
             candidateData,
             candidateDataSchema,
-            'creating candidate',
             instructions
         );
     }
 
-    protected buildCreatePayload(candidateData: CandidateData, instructions: Partial<CandidateInstructions> = {}): CreateCandidatePayload {
+    async searchCandidates(instructions: SearchInstructions): Promise<SearchCandidateResponse> {
+        return this.search<SearchCandidateResponse>(
+            '/api/widget/getRecords',
+            instructions,
+        );
+    }
+
+    async updateCandidate(
+        id: number,
+        updates: Partial<CandidateUpdateData>
+    ): Promise<UpdateCandidateResponse> {
+        const parsedData = candidateUpdateSchema.partial().safeParse(updates);
+        if (!parsedData.success) {
+            const formattedError = formatValidationError(parsedData.error);
+            throw new Error(`Validation failed: ${formattedError}`);
+        }
+
+        const payload = this.buildUpdatePayload(id, parsedData.data);
+        return this.update<UpdateCandidateResponse>('/api/widget/updateRecord', payload);
+    }
+
+    protected buildCreatePayload(data: CandidateData, instructions: CreateCandidateOptions): CreateCandidatePayload {
         return {
             trackerrms: {
                 createResource: {
                     credentials: this.credentials,
                     instructions: {
-                        overwriteresource: instructions.overwriteresource ?? false,
-                        assigntoopportunity: instructions.assigntoopportunity,
-                        assigntolist: instructions.assigntolist,
-                        shortlistedby: instructions.shortlistedby,
                     },
-                    resource: candidateData,
+                    resource: data,
                 },
             },
         };
     }
 
-    protected buildFindPayload(id: number): any {
-        // Implement this method if you need to find candidates by ID
-        // If not needed, you can throw an error or leave it as a stub
+    protected buildSearchPayload(instructions: SearchInstructions): SearchCandidatePayload {
+        return {
+            trackerrms: {
+                getRecords: {
+                    credentials: this.credentials,
+                    instructions
+                }
+            }
+        };
+    }
+
+    protected buildFindPayload(id: number): never {
         throw new Error("Find operation not implemented for Candidates");
     }
 
-    protected buildUpdatePayload(id: number): any {
-        // Implement this if you need to find leads by ID
-        // If not needed, you can throw an error or leave it as a stub
-        throw new Error("Find operation not implemented for Leads");
+    protected buildUpdatePayload(id: number, updates: Partial<CandidateUpdateData>): UpdateCandidatePayload {
+        const updateFields = Object.entries(updates).map(([column, value]) => ({
+            column,
+            value: value?.toString() ?? ''
+        }));
+
+        return {
+            trackerrms: {
+                updateRecord: {
+                    credentials: this.credentials,
+                    instructions: {
+                        recordtype: this.entityType,
+                        recordid: id
+                    },
+                    updates: updateFields
+                }
+            }
+        };
     }
 }

@@ -1,61 +1,91 @@
-import {
-    type CreateJobResponse,
-    type CreateJobPayload,
-    type GetJobResponse,
-    type GetJobPayload,
-    type JobInstructions,
-    type UpdateJobPayload
-} from '../../types/job/jobTypes';
-import { 
-    jobCreateDataSchema,
-    jobUpdateDataSchema, 
-    type JobCreateData,
-    type JobUpdateData,
-    type JobDetails 
-} from '../../types/job/jobData';
-import { ApiError } from '../../utils/errors';
 import { BaseApi } from '../base';
+import type { SearchInstructions } from '../../types/search/searchData';
+import {
+    type CreateJobOptions,
+    type CreateJobPayload,
+    type CreateJobResponse,
+    type SearchJobPayload,
+    type SearchJobResponse,
+    type UpdateJobPayload,
+    type UpdateJobResponse,
+    type JobData,
+    type JobUpdateData,
+    jobDataSchema,
+    jobUpdateSchema,
+} from '../../types/job';
+import { formatValidationError } from '../../utils/errors';
 
 export class Jobs extends BaseApi {
+    protected get entityType(): string {
+        return 'O';
+    }
+
     async createJob(
-        jobData: JobCreateData,
-        instructions: JobInstructions = {}
+        jobData: Partial<JobData> = {},
+        instructions: CreateJobOptions = {
+            createpersonifnotexists: true
+        }
     ): Promise<CreateJobResponse> {
-        return this.create<CreateJobResponse, JobCreateData, JobInstructions>(
+        return this.create<CreateJobResponse, JobData, CreateJobOptions>(
             '/api/widget/createOpportunity',
             jobData,
-            jobCreateDataSchema,
-            'creating job',
+            jobDataSchema,
             instructions
         );
     }
 
-    async findById(id: number): Promise<JobDetails> {
-        const response = await this.find<GetJobResponse>(
-            '/api/widget/getIndividualRecord',
-            id,
-            `fetching job with id ${id}`
+    async searchJobs(instructions: SearchInstructions): Promise<SearchJobResponse> {
+        return this.search<SearchJobResponse>(
+            '/api/widget/getRecords',
+            instructions,
         );
+    }
 
-        if (!response.results || response.results.length === 0) {
-            throw new ApiError('No job found', response);
+    async updateJob(
+        id: number,
+        updates: Partial<JobUpdateData>
+    ): Promise<UpdateJobResponse> {
+        const parsedData = jobUpdateSchema.partial().safeParse(updates);
+        if (!parsedData.success) {
+            const formattedError = formatValidationError(parsedData.error);
+            throw new Error(`Validation failed: ${formattedError}`);
         }
 
-        return response.results[0];
+        const payload = this.buildUpdatePayload(id, parsedData.data);
+        return this.update<UpdateJobResponse>('/api/widget/updateRecord', payload);
     }
 
-    async updateJob(id: number, updates: JobUpdateData): Promise<void> {
-        const payload = this.buildUpdatePayload(id, updates);
-        await this.update<void>(
-            '/api/widget/updateRecord',
-            payload,
-            `updating job with id ${id}`
-        );
+    protected buildCreatePayload(data: JobData, instructions: CreateJobOptions): CreateJobPayload {
+        return {
+            trackerrms: {
+                createOpportunity: {
+                    credentials: this.credentials,
+                    instructions: {
+                        createpersonifnotexists: instructions.createpersonifnotexists,
+                    },
+                    opportunity: data,
+                },
+            },
+        };
     }
 
-    protected buildUpdatePayload(id: number, updates: JobUpdateData): UpdateJobPayload {
-        const parsedUpdates = jobUpdateDataSchema.parse(updates);
-        const updateArray = Object.entries(parsedUpdates).map(([column, value]) => ({
+    protected buildSearchPayload(instructions: SearchInstructions): SearchJobPayload {
+        return {
+            trackerrms: {
+                getRecords: {
+                    credentials: this.credentials,
+                    instructions
+                }
+            }
+        };
+    }
+
+    protected buildFindPayload(id: number): never {
+        throw new Error("Find operation not implemented for Jobs");
+    }
+
+    protected buildUpdatePayload(id: number, updates: Partial<JobUpdateData>): UpdateJobPayload {
+        const updateFields = Object.entries(updates).map(([column, value]) => ({
             column,
             value: value?.toString() ?? ''
         }));
@@ -65,38 +95,10 @@ export class Jobs extends BaseApi {
                 updateRecord: {
                     credentials: this.credentials,
                     instructions: {
-                        recordtype: 'O',
+                        recordtype: this.entityType,
                         recordid: id
                     },
-                    updates: updateArray
-                }
-            }
-        };
-    }
-
-    protected buildCreatePayload(jobData: JobCreateData, instructions: JobInstructions = {}): CreateJobPayload {
-        return {
-            trackerrms: {
-                createOpportunity: {
-                    credentials: this.credentials,
-                    instructions: {
-                        createpersonifnotexists: instructions.createpersonifnotexists ?? true,
-                    },
-                    opportunity: jobData,
-                },
-            },
-        };
-    }
-
-    protected buildFindPayload(id: number): GetJobPayload {
-        return {
-            trackerrms: {
-                getIndividualRecord: {
-                    credentials: this.credentials,
-                    instructions: {
-                        recordtype: 'O',
-                        recordid: id
-                    }
+                    updates: updateFields
                 }
             }
         };

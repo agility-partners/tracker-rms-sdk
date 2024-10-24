@@ -2,8 +2,8 @@ import { test, expect } from "bun:test";
 import Tracker from "../../../tracker";
 import { 
   ResponseStatus, 
-  type JobData, 
-  type JobInstructions 
+  type CreateJobOptions, 
+  type JobData,  
 } from "../../../types";
 
 test('createJob creates a new job opportunity successfully', async () => {
@@ -16,19 +16,12 @@ test('createJob creates a new job opportunity successfully', async () => {
     department: "Sales",
     worktype: "Contract To Hire",
     fullname: "John Brown",
-    source: "",
     description: "1 role is day shift and 1 is night shift. This team works twelve hour shifts. 7a-7p and 7p-7a. They alternate 3 days and 4 days a week. So one week is Sun-Tues then Sun-WedÂ \nÂ ",
     company: "Compass Group",
-    address1: "",
-    address2: "",
-    city: "",
-    state: "",
-    zipcode: "",
-    country: "",
   };
   
   // Define instructions
-  const instructions: JobInstructions = {
+  const instructions: CreateJobOptions = {
     createpersonifnotexists: true
   };
 

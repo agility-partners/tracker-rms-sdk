@@ -1,27 +1,30 @@
 import { test, expect } from "bun:test";
 import Tracker from "../../../tracker";
+import type { JobUpdateData } from "../../../types";
 
-test('updateJob updates a job opportunity successfully', async () => {
-  const tracker = new Tracker();
+test('updateJob updates a job successfully', async () => {
+    // Initialize the Tracker
+    const tracker = new Tracker();
 
-  const jobId = 1056; // Use an existing job ID
-  const updatedName = `Updated Job Name ${Date.now()}`; // Ensure unique name for each test run
+    // Define the job ID and update data
+    const jobId = 1106; // You might want to use a real ID or create a job first
+    const updates: Partial<JobUpdateData> = {
+        opportunityname: 'Updated IT Project Manager Role',
+        publishsalaryfrom: '120000',
+        publishsalaryto: '150000',
+        publishworktype: 'Contract',
+        location: 'Remote',
+        publishdescription: 'Updated role description for IT Project Manager position',
+        opportunityrate: '50',
+        opportunitychargerate: '70'
+    };
 
-  // First, retrieve the job
-  const initialJob = await tracker.jobs.findById(jobId);
-  expect(initialJob.id).toBe(jobId);
+    // Call the updateJob method
+    const response = await tracker.jobs.updateJob(jobId, updates);
 
-  // Update the job
-  await tracker.jobs.updateJob(jobId, {
-    opportunityname: updatedName
-  });
-
-  // Retrieve the job again to check if updates were applied
-  const updatedJob = await tracker.jobs.findById(jobId);
-  
-  // Check if the updates were applied successfully
-  expect(updatedJob.id).toBe(jobId);
-  expect(updatedJob.name).toBe(updatedName);
-
-
-}, 15000); 
+    // Assertions
+    expect(response).toBeTruthy();
+    expect(response.status).toBe(0); // Success status
+    expect(response.message).toBe('success');
+    expect(response.count).toBeDefined();
+}, 15000);
