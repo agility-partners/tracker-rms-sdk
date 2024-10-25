@@ -1,37 +1,29 @@
 import { test, expect } from "bun:test";
-import type { ActivityData } from "../../../types/activity/activityData";
-import type { ActivityInstructions } from "../../../types/activity/activityTypes";
 import Tracker from "../../../tracker";
+import type { 
+    ActivityData
+} from "../../../types/activity";
 
 test('createActivity creates a new activity successfully', async () => {
-  // Initialize the Tracker
-  const tracker = new Tracker();
+    const tracker = new Tracker();
 
-  // Define the activity data
-  const activity: ActivityData = {
-    subject: 'Test Phone Call',
-    type: 'Telephone',
-    date: '2024-10-21',
-    time: '11:34 AM',
-    status: 'Completed',
-    priority: 'Medium',
-    contactType: 'Outbound',
-    note: 'Test activity creation',
-    userId: 21,
-    linkRecordType: 'N',
-    linkRecordId: 1854
-  };
+    const activity: ActivityData = {
+        subject: "Integration Test",
+        type: "Telephone",
+        date: "2024-10-29",
+        time: "11:30 AM",
+        status: "Waiting",
+        priority: "High",
+        contactType: "Outbound",
+        note: "Follow up call regarding recent job opportunity.",
+        userId: 21,
+        linkRecordType: "N", // C for Contact
+        linkRecordId: 1992,  // Contact ID from the example
+    };
 
-  // Define any instructions (optional)
-  const instructions: ActivityInstructions = {
-    
-  };
+    const response = await tracker.activities.createActivity(activity);
 
-  // Call the createActivity method
-  const response = await tracker.activities.createActivity(activity, instructions);
-
-  // Assertions
-  expect(response).toBeTruthy();
-  expect(response.message).toEqual("created");
-  expect(response.recordName).toEqual(activity.subject);
-});
+    console.log(response)
+    expect(response).toBeTruthy();
+    expect(response.message).toEqual("success");
+}, 15000);

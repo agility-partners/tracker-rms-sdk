@@ -1,4 +1,4 @@
-import type { AxiosInstance } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { 
     ResponseStatus, 
     type ApiResponse, 
@@ -19,11 +19,27 @@ interface CompleteSearchInstructions extends SearchInstructions {
 export abstract class BaseApi {
     constructor(protected client: AxiosInstance, protected credentials: Credentials) {}
 
+    protected getRequestConfig(requiresAuth: boolean = false): AxiosRequestConfig {
+        if (requiresAuth) {
+            const authString = Buffer.from(
+                `${this.credentials.username}:${this.credentials.password}`
+            ).toString('base64');
+            
+            return {
+                headers: {
+                    'Authorization': `Basic ${authString}`
+                }
+            };
+        }
+        return {};
+    }
+
     protected async create<TResponse, TData, TInstructions>(
         url: string,
         data: Partial<TData>,
         schema: any,
-        instructions?: TInstructions
+        instructions?: TInstructions,
+        requiresAuth: boolean = false
     ): Promise<TResponse> {
         try {
             const defaults = generateDefaultsFromSchema<TData>(schema);
@@ -36,7 +52,8 @@ export abstract class BaseApi {
             }
 
             const payload = this.buildCreatePayload(parsedData.data, instructions);
-            const response = await this.client.post<TResponse>(url, payload);
+            const config = this.getRequestConfig(requiresAuth);
+            const response = await this.client.post<TResponse>(url, payload, config);
             return response.data;
 
         } catch (error) {
@@ -46,11 +63,13 @@ export abstract class BaseApi {
 
     protected async find<TResponse>(
         url: string,
-        id: number
+        id: number,
+        requiresAuth: boolean = false
     ): Promise<TResponse> {
         try {
             const payload = this.buildFindPayload(id);
-            const response = await this.client.post<TResponse>(url, payload);
+            const config = this.getRequestConfig(requiresAuth);
+            const response = await this.client.post<TResponse>(url, payload, config);
 
             if ((response.data as ApiResponse<any>).status !== ResponseStatus.Success) {
                 throw new ApiError('Record not found or access denied', response.data);
@@ -66,7 +85,8 @@ export abstract class BaseApi {
 
     protected async search<TResponse extends ApiResponse<any>>(
         url: string,
-        instructions: SearchInstructions
+        instructions: SearchInstructions,
+        requiresAuth: boolean = false
     ): Promise<TResponse> {
         try {
             const completeInstructions: CompleteSearchInstructions = {
@@ -75,7 +95,8 @@ export abstract class BaseApi {
             };
 
             const payload = this.buildSearchPayload(completeInstructions);
-            const response = await this.client.post<TResponse>(url, payload);
+            const config = this.getRequestConfig(requiresAuth);
+            const response = await this.client.post<TResponse>(url, payload, config);
 
             if (response.data.status !== ResponseStatus.Success) {
                 throw new ApiError('Search failed or returned no results', response.data);
@@ -89,10 +110,12 @@ export abstract class BaseApi {
 
     protected async update<TResponse>(
         url: string,
-        payload: any
+        payload: any,
+        requiresAuth: boolean = false
     ): Promise<TResponse> {
         try {
-            const response = await this.client.post<TResponse>(url, payload);
+            const config = this.getRequestConfig(requiresAuth);
+            const response = await this.client.post<TResponse>(url, payload, config);
 
             if ((response.data as ApiResponse<any>).status !== ResponseStatus.Success) {
                 throw new ApiError('Update failed or record not found', response.data);
