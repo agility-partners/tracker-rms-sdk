@@ -5,6 +5,7 @@ import {
     Jobs, 
     Leads 
 } from './api';
+import { Companies } from './api/companies';
 import { createAPIClient } from './config/apiClient';
 import type { Credentials } from './types';
 
@@ -18,6 +19,7 @@ class Tracker {
   public jobs: Jobs
   public candidates: Candidates;
   public activities: Activities;
+  public companies: Companies
 
   constructor(baseURL?: string, credentials?: Credentials) {
     this.baseURL = baseURL || process.env.TRACKER_BASE_URL || '';
@@ -42,6 +44,7 @@ class Tracker {
     this.jobs = new Jobs(this.client, this.credentials);
     this.candidates = new Candidates(this.client, this.credentials);
     this.activities = new Activities(this.client, this.credentials);
+    this.companies = new Companies(this.client, this.credentials);
   }
 }
 
