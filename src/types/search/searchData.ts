@@ -16,3 +16,6 @@ export const searchInstructionsSchema = z.object({
 });
 
 export type SearchInstructions = z.infer<typeof searchInstructionsSchema>;
+
+// Add test console.log
+console.log('searchData.ts - schema available:', searchInstructionsSchema);

@@ -5,3 +5,4 @@ export * from './candidate'
 export * from './job'
 export * from './lead'
 export * from './search'
+console.log('types/index.ts - exports:', module.exports);
