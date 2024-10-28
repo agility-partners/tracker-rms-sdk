@@ -3,7 +3,7 @@ import {
     Candidates, 
     Contacts, 
     Jobs, 
-    Leads 
+    Leads
 } from './api';
 import { Companies } from './api/companies';
 import { createAPIClient } from './config/apiClient';

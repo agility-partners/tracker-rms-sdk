@@ -4,3 +4,4 @@ export * from './contact';
 export * from './candidate'
 export * from './job'
 export * from './lead'
+export * from './search'
