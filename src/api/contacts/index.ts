@@ -1,5 +1,5 @@
 import { BaseApi } from '../base';
-import type { SearchInstructions } from '../../types/search/searchData';
+import type { SearchInstructions } from '../../types/search/schema';
 import { 
     type CreateContactOptions,
     type CreateContactPayload,

@@ -1,5 +1,5 @@
 import { BaseApi } from '../base';
-import type { SearchInstructions } from '../../types/search/searchData';
+import type { SearchInstructions } from '../../types/search/schema';
 import { formatValidationError } from '../../utils/errors';
 import { companyDataSchema, companyUpdateSchema, type CompanyData, type CompanyUpdateData, type CreateCompanyOptions, type CreateCompanyPayload, type CreateCompanyResponse, type SearchCompanyPayload, type SearchCompanyResponse, type UpdateCompanyPayload, type UpdateCompanyResponse } from '../../types/company';
 

@@ -1,6 +1,6 @@
 // src/types/common/api.ts
 import type { Credentials } from '../auth';
-import type { SearchInstructions } from '../search/searchData';
+import type { SearchInstructions } from '../search/schema';
 import type { ApiResponse } from '../response';
 
 // Generic Record Response

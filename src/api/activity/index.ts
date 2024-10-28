@@ -1,5 +1,5 @@
 import { BaseApi } from '../base';
-import type { SearchInstructions } from '../../types/search/searchData';
+import type { SearchInstructions } from '../../types/search/schema';
 import { formatValidationError } from '../../utils/errors';
 import { activityDataSchema, activityUpdateSchema, type ActivityData, type ActivityUpdateData, type CreateActivityOptions, type CreateActivityPayload, type CreateActivityResponse, type SearchActivityPayload, type SearchActivityResponse, type UpdateActivityPayload, type UpdateActivityResponse } from '../../types/activity';
 

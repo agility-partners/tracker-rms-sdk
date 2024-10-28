@@ -10,7 +10,7 @@ import {
     handleError 
 } from '../utils/errors';
 import { generateDefaultsFromSchema } from '../utils/generateDefaults';
-import type { SearchInstructions } from '../types/search/searchData';
+import type { SearchInstructions } from '../types/search/schema';
 
 interface CompleteSearchInstructions extends SearchInstructions {
     recordtype: string;

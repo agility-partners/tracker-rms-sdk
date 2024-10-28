@@ -1,6 +1,6 @@
 import { test, expect } from "bun:test";
 import Tracker from "../../../tracker";
-import type { SearchInstructions } from "../../../types/search/searchData";
+import type { SearchInstructions } from "../../../types/search/schema";
 
 test('searchCandidates returns candidates matching search criteria', async () => {
     const tracker = new Tracker();
