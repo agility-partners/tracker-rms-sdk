@@ -18,7 +18,7 @@ export const candidateDataSchema = z.object({
     firstname: z.string(),
     lastname: z.string(),
     fullname: z.string(),
-    jobtitle: z.string(),
+    jobtitle: z.string().optional(),
     company: z.string().optional(),
     address1: z.string().optional(),
     address2: z.string().optional(),

@@ -9,16 +9,16 @@ test('createActivity creates a new activity successfully', async () => {
 
     const activity: ActivityData = {
         subject: "Integration Test",
-        type: "Telephone",
+        type: "InMail",
         date: "2024-10-29",
         time: "11:30 AM",
-        status: "Waiting",
+        status: "Closed",
         priority: "High",
         contactType: "Outbound",
         note: "Follow up call regarding recent job opportunity.",
         userId: 21,
         linkRecordType: "N", // C for Contact
-        linkRecordId: 1992,  // Contact ID from the example
+        linkRecordId: 2080,  // Contact ID from the example
     };
 
     const response = await tracker.activities.createActivity(activity);
