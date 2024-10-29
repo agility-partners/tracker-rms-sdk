@@ -6,6 +6,7 @@ import {
     Leads
 } from './api';
 import { Companies } from './api/companies';
+import { ResourceApplications } from './api/resourceApplication';
 import { createAPIClient } from './config/apiClient';
 import type { Credentials } from './types';
 
@@ -20,6 +21,7 @@ class Tracker {
   public candidates: Candidates;
   public activities: Activities;
   public companies: Companies
+  public resourceApplications: ResourceApplications
 
   constructor(baseURL?: string, credentials?: Credentials) {
     this.baseURL = baseURL || process.env.TRACKER_BASE_URL || '';
@@ -45,6 +47,7 @@ class Tracker {
     this.candidates = new Candidates(this.client, this.credentials);
     this.activities = new Activities(this.client, this.credentials);
     this.companies = new Companies(this.client, this.credentials);
+    this.resourceApplications = new ResourceApplications(this.client, this.credentials)
   }
 }
 
