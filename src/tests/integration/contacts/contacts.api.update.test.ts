@@ -6,12 +6,14 @@ test('updateContact updates a contact successfully', async () => {
     // Initialize the Tracker
     const tracker = new Tracker();
 
-    const contactId = 2001; 
+    const contactId = 26366; 
     const updates: Partial<ContactUpdateData> = {
-        firstname: 'John',
-        department: 'Columbus',
-        addressline1: '123 test street',
-        businessphone: '4192023773'
+        customfields: [
+            {
+                id: 4,
+                value: 'Yes'
+            }
+        ]
     };
 
     // Call the updateContact method

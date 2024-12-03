@@ -22,8 +22,7 @@ export const contactDataSchema = z.object({
     linkedin: z.string().optional(),
     website: z.string().optional(),
     note: z.string().optional(),
-    image: z.string().optional(),
-    customfields: z.array(CustomFieldSchema).optional(),
+    image: z.string().optional()
 });
 
 export type ContactData = z.infer<typeof contactDataSchema>;
@@ -73,7 +72,12 @@ export const contactUpdateSchema = z.object({
     tag: z.string().optional(),
     text: z.string().optional(),
     town: z.string().optional(),
-    website: z.string().optional()
+    website: z.string().optional(),
+    customfields: z.array(CustomFieldSchema).optional(),
+    skills: z.array(z.object({
+        id: z.number(),
+        value: z.string()
+    })).optional()
 });
 
 export type ContactUpdateData = z.infer<typeof contactUpdateSchema>;

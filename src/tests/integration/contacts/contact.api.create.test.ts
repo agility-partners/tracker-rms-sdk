@@ -9,13 +9,7 @@ test('createContact creates a new contact successfully', async () => {
   // Define the contact data
   const contact: ContactData = {
     fullname: 'Hello World',
-    company: 'Microsoft',
-    customfields: [
-      {
-        id: 50,
-        value: 'Custom Value'
-      }
-    ]
+    company: 'Microsoft'
   };
 
   // Define any instructions (optional)

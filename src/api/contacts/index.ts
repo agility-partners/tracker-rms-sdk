@@ -92,6 +92,17 @@ export class Contacts extends BaseApi {
             value: value?.toString() ?? ''
         }));
 
+        // Assuming customfields and skills are part of updates
+        const customFields = updates.customfields?.map(field => ({
+            id: field.id,
+            value: field.value
+        })) ?? [];
+
+        const skills = updates.skills?.map(skill => ({
+            id: skill.id,
+            value: skill.value
+        })) ?? [];
+
         return {
             trackerrms: {
                 updateRecord: {
@@ -100,7 +111,9 @@ export class Contacts extends BaseApi {
                         recordtype: this.entityType,
                         recordid: id
                     },
-                    updates: updateFields
+                    updates: updateFields,
+                    customfields: customFields,
+                    skills: skills
                 }
             }
         };
