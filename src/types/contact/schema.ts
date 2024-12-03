@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { generateDefaultsFromSchema } from '../../utils/generateDefaults';
+import { CustomFieldSchema } from '../common/entityTypes';
 
 // Define Zod schema for all possible contact fields
 export const contactDataSchema = z.object({
@@ -22,7 +23,7 @@ export const contactDataSchema = z.object({
     website: z.string().optional(),
     note: z.string().optional(),
     image: z.string().optional(),
-    customfields: z.record(z.string()).optional(),
+    customfields: z.array(CustomFieldSchema).optional(),
 });
 
 export type ContactData = z.infer<typeof contactDataSchema>;
