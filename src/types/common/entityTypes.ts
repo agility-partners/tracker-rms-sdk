@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { 
     CreatePayload, 
     CreateRecordResponse,
@@ -48,3 +49,8 @@ export type BuildEntityTypes<T extends BaseEntityConfig<any, any, any, string, s
     Payloads: EntityPayloads<T>;
     Responses: EntityResponses<T>;
 }
+
+export const CustomFieldSchema = z.object({
+    id: z.number(),
+    value: z.string(),
+});

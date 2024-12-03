@@ -17,13 +17,12 @@ test('createActivity creates a new activity successfully', async () => {
         contactType: "Outbound",
         note: "Follow up call regarding recent job opportunity.",
         userId: 21,
-        linkRecordType: "N", // C for Contact
-        linkRecordId: 2080,  // Contact ID from the example
+        linkRecordType: "R", 
+        linkRecordId: 2080
     };
 
     const response = await tracker.activities.createActivity(activity);
 
-    console.log(response)
     expect(response).toBeTruthy();
     expect(response.message).toEqual("success");
 }, 15000);

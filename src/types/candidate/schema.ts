@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { generateDefaultsFromSchema } from '../../utils/generateDefaults';
+import { CustomFieldSchema } from '../common/entityTypes';
 
 const JobHistorySchema = z.object({
     company: z.string().optional(),
@@ -9,10 +10,6 @@ const JobHistorySchema = z.object({
     description: z.string().optional(),
 });
 
-const CustomFieldSchema = z.object({
-    id: z.number(),
-    value: z.string(),
-});
 
 export const candidateDataSchema = z.object({
     firstname: z.string(),

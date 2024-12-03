@@ -7,8 +7,8 @@ test('createResourceApplication creates a new application successfully', async (
     const tracker = new Tracker();
 
     const instructions: CreateResourceApplicationOptions = {
-        opportunityid: "1146",
-        resourceid: "228",
+        opportunityid: "1239",
+        resourceid: "754",
         assigntolist: "short",
         shortlistedby: "user",
         source: "Website"

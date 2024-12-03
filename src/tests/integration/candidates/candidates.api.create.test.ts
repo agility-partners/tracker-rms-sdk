@@ -50,6 +50,12 @@ test('createCandidate creates a new candidate successfully', async () => {
         image: "",
         skills: "123,456,789,654",
         status: "Active",
+        customfields: [
+            {
+                id: 50,
+                value: "Custom Value"
+            }
+        ]
     };
 
     const response = await tracker.candidates.createCandidate(candidate);
