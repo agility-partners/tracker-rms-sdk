@@ -34,7 +34,7 @@ export class Placements extends BaseApi {
         );
     }
 
-    async searchLeads(instructions: SearchInstructions): Promise<SearchPlacementResponse> {
+    async searchPlacement(instructions: SearchInstructions): Promise<SearchPlacementResponse> {
         return this.search<SearchPlacementResponse>(
             '/api/widget/getRecords',
             instructions,
